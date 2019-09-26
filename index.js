@@ -2,6 +2,19 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+//register morgan
+const morgan = require('morgan')
+//make custom token called body
+morgan.token('body', (request, _) => {
+    if(request.method === "POST"){
+        return JSON.stringify(request.body)
+    }
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+
+// morgan(':method :url :status :res[content-length] ')
+
 let persons = [
     { 
       "name": "Arto Hellas", 
@@ -81,7 +94,6 @@ const findPerson = (id, persons) => persons.find(p => p.id === id);
 const generateRandomNumber = () =>{
     const UPPER_LIMIT = 10242048
     const id = Math.floor(Math.random() * UPPER_LIMIT)
-    console.log(id)
     return id;
 }
 //create a person
@@ -92,13 +104,11 @@ const createPerson = (personObject) => ({
 })
 //validate person
 const validatePerson = (personObject, persons) => {
-    console.log(personObject)
     const checkEmptiness = () => 
                         stringIsUndefined(personObject.name) || stringIsUndefined(personObject.number)
     const existsInPersons = () =>
                         !stringIsUndefined(personObject.name) && persons.find(p => p.name === personObject.name) !== undefined
 
-    console.log(checkEmptiness(), existsInPersons())
     //check if the values are empty
     if(checkEmptiness()){
         //get an appropriate response
@@ -136,10 +146,9 @@ const validatePerson = (personObject, persons) => {
     }
     return {success: true}   
 }
-const PORT = 3001
-const stringIsUndefined = (param) => {
-console.log(param === undefined)
-return param === undefined
 
-}
-app.listen(PORT, () => {console.log(`server listening on port ${PORT}`)})
+
+const PORT = 3001
+const stringIsUndefined = (param) =>  param === undefined
+
+app.listen(PORT, () => {console.log(`Server running on port ${PORT}`)})
