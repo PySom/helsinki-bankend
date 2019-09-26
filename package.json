@@ -1,0 +1,27 @@
+{
+  "name": "helsinki-bankend",
+  "version": "1.0.0",
+  "description": "Backend (Node portion) of Helsinki fullstack development",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PySom/helsinki-bankend.git"
+  },
+  "author": "Chisom Victor Nwisu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PySom/helsinki-bankend/issues"
+  },
+  "homepage": "https://github.com/PySom/helsinki-bankend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}
