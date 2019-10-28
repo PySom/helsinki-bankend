@@ -4,16 +4,14 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 //register morgan
 const morgan = require('morgan')
+
 //make custom token called body
-morgan.token('body', (request, _) => {
+morgan.token("body", (request, response) => {
     if(request.method === "POST"){
         return JSON.stringify(request.body)
     }
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-
-// morgan(':method :url :status :res[content-length] ')
 
 let persons = [
     { 
@@ -69,7 +67,7 @@ app.delete(`${apiBase}:id`, (request, response) => {
     if(!person){
         return response.status(404).end()
     }
-    persons = [...persons.filter(p => p.id !== id)];
+    persons = persons.filter(p => p.id !== id);
     response.status(204).end()
 })
 
@@ -83,7 +81,7 @@ app.post(`${apiBase}`, (request, response) => {
         })
     }
     const newPerson = createPerson(body)
-    persons = [...persons.concat(newPerson)]
+    persons = persons.concat(newPerson)
     response.json(newPerson)
 })
 
@@ -151,4 +149,4 @@ const validatePerson = (personObject, persons) => {
 const PORT = 3001
 const stringIsUndefined = (param) =>  param === undefined
 
-app.listen(PORT, () => {console.log(`Server running on port ${PORT}`)})
+app.listen(PORT, () => {console.log(`server listening on port ${PORT}`)})
