@@ -69,7 +69,7 @@ app.delete(`${apiBase}:id`, (request, response) => {
     if(!person){
         return response.status(404).end()
     }
-    persons = [...persons.filter(p => p.id !== id)];
+    persons = persons.filter(p => p.id !== id);
     response.status(204).end()
 })
 
@@ -83,7 +83,7 @@ app.post(`${apiBase}`, (request, response) => {
         })
     }
     const newPerson = createPerson(body)
-    persons = [...persons.concat(newPerson)]
+    persons = persons.concat(newPerson)
     response.json(newPerson)
 })
 
@@ -103,10 +103,11 @@ const createPerson = (personObject) => ({
     "id": generateRandomNumber()
 })
 //validate person
-const validatePerson = (personObject) => {
+const validatePerson = (personObject, persons) => {
     const empty = () => {
-        const a = stringIsUndefined(personObject.name.trim())
-        const b = stringIsUndefined(personObject.number.trim())
+        const a = stringIsUndefined(personObject.name)
+        const b = stringIsUndefined(personObject.number)
+        console.log(personObject.number)
         console.log("name undefined", a)
         console.log("number undefined", b)
         return a || b;
@@ -114,12 +115,11 @@ const validatePerson = (personObject) => {
     }
     const existsInPersons = () =>
     {
-        const personIsNotNull = !stringIsUndefined(personObject.name.trim())
-        const personExist = !(!(persons.find(p => p.name === personObject.name.trim())))
+        const personIsNotNull = !stringIsUndefined(personObject.name)
+        const personExist = !(!(persons.find(p => p.name === personObject.name)))
         console.log("Person not null: ", personIsNotNull, "Person exist: ", personExist)
         return personIsNotNull && personExist
     }
-    console.log("an empty shit", empty())
     //check if the values are empty
     if(empty()){
         console.log("I was at least empty")
@@ -162,6 +162,6 @@ const validatePerson = (personObject) => {
 
 
 const PORT = 3001
-const stringIsUndefined = (param) =>  param === undefined
+const stringIsUndefined = (param) =>  !(!!param && !!param.trim())
 
 app.listen(PORT, () => {console.log(`Server running on port ${PORT}`)})
