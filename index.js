@@ -103,14 +103,26 @@ const createPerson = (personObject) => ({
     "id": generateRandomNumber()
 })
 //validate person
-const validatePerson = (personObject, persons) => {
-    const checkEmptiness = () => 
-                        stringIsUndefined(personObject.name) || stringIsUndefined(personObject.number)
-    const existsInPersons = () =>
-                        !stringIsUndefined(personObject.name) && persons.find(p => p.name === personObject.name) !== undefined
+const validatePerson = (personObject) => {
+    const empty = () => {
+        const a = stringIsUndefined(personObject.name.trim())
+        const b = stringIsUndefined(personObject.number.trim())
+        console.log("name undefined", a)
+        console.log("number undefined", b)
+        return a || b;
 
+    }
+    const existsInPersons = () =>
+    {
+        const personIsNotNull = !stringIsUndefined(personObject.name.trim())
+        const personExist = !(!(persons.find(p => p.name === personObject.name.trim())))
+        console.log("Person not null: ", personIsNotNull, "Person exist: ", personExist)
+        return personIsNotNull && personExist
+    }
+    console.log("an empty shit", empty())
     //check if the values are empty
-    if(checkEmptiness()){
+    if(empty()){
+        console.log("I was at least empty")
         //get an appropriate response
         let culprit = "";
             culprit += stringIsUndefined(personObject.name)
@@ -139,6 +151,7 @@ const validatePerson = (personObject, persons) => {
     }
 
     else if(existsInPersons()){
+        console.log("not cool")
         return {
             success: false,
             message: "name must be unique"
